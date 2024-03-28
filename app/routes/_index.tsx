@@ -29,7 +29,7 @@ const Index = () => {
       const zip = new JSZip();
       const zipFile = await zip.loadAsync(file);
       const imageFiles = Object.values(zipFile.files).filter(
-        (file) => !file.dir && file.name.match(/\.(jpg|jpeg|png|gif)$/i)
+        (file) => !file.dir && file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i)
       );
 
       const imageUrls = await Promise.all(
