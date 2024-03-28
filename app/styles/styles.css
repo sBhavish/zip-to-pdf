@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: poppins;
+}
+
+img {
+    width: 100%;
+    height: fit-content;
+    object-fit: contain;
+}
+
+.main-content {
+    display: grid;
+}
+
+.file-upload {
+    margin-left: auto;
+    margin-right: auto;
+    margin: 4rem;
+}
