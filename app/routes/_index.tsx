@@ -14,8 +14,8 @@ export const links: LinksFunction = () => [
 ];
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Zip to image content viewer" },
+    { name: "description", content: "A web app that helps you view the image contents of your zip file completely on your phone" },
   ];
 };
 
