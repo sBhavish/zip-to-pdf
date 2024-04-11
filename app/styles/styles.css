@@ -32,8 +32,8 @@ body {
     place-items: center;
     padding: 0.5rem;
     bottom: 1.5rem;
-    height: fit-content;
-    aspect-ratio: 1/1;
+    height: 3rem;
+    width: 3rem;
     right: 1.5rem;
     z-index: 99;
     border: none;
@@ -45,4 +45,51 @@ body {
     border-radius: 9999px;
     font-size: 18px;
     box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    animation: none;
+}
+.refresh-btn:hover{
+    animation: spin 1s linear;
+}
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+.download-btn {
+    position: fixed;
+    display: grid;
+    place-items: center;
+    padding: 0.5rem;
+    bottom: 6rem;
+    align-items: center;
+    width: 3rem;
+    height: 3rem;
+    aspect-ratio: 1/1;
+    right: 1.5rem;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: #dbd6d6;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    color: white;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 18px;
+}
+.download-btn:hover{
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .5;
+    }
 }
