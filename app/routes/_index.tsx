@@ -15,7 +15,7 @@ export const links: LinksFunction = () => [
 ];
 export const meta: MetaFunction = () => {
   return [
-    { title: "Zip to image content viewer" },
+    { title: "View/Download zip of images as PDF" },
     { name: "description", content: "A web app that helps you view the image contents of your zip file completely on your phone" },
   ];
 };
