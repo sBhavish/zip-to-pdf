@@ -93,3 +93,16 @@ body {
         opacity: .5;
     }
 }
+.source-check-group{
+    color: white;
+    display: grid;
+    padding: 1rem;
+    place-items: end;
+    gap: 0.5rem;
+    width: 100%;
+    accent-color: rgb(118, 223, 118);
+}
+.source-check-group > label{
+    display: flex;
+    gap: 1rem;
+}

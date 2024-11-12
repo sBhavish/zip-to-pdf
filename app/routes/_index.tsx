@@ -5,6 +5,7 @@ import type { LinksFunction } from "@remix-run/node";
 import styles from '~/styles/styles.css?url'
 import jsPDF from "jspdf";
 import loadingGif from '~/loading-thinking.gif'
+import logo1 from '~/logo.svg'
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
   { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous"},
@@ -22,8 +23,12 @@ export const meta: MetaFunction = () => {
 
 const Index = () => {
   const [images, setImages] = useState([]);
+  const [selectedSource, setSelectedSource] = useState('');
   const [loadedImages, setLoadedImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const handleSource = (event) => {
+    setSelectedSource(event.target.value);
+  };
   const handleFileChange = async (event: any) => {
     setIsLoading(true);
   const file = event.target.files[0];
@@ -33,7 +38,14 @@ const Index = () => {
     const zip = new JSZip();
     const zipFile = await zip.loadAsync(file);
     const imageFiles = Object.values(zipFile.files)
-      .filter((file) => !file.dir && file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i))
+      .filter((file) =>
+        !file.dir &&
+        (
+          selectedSource === '' ?
+            file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i) :
+            (selectedSource === 'NH' && !file.name.match(/t\.(jpg|jpeg|png|gif|webp)$/i))
+        )
+      )
       .sort((a, b) => a.name.localeCompare(b.name));
 
     const imageUrlsWithNames: { url: string; name: string }[] = await Promise.all(
@@ -81,7 +93,18 @@ const handleRefresh = () => {
   window.location.reload();
 };
   return (
-    <div style={{display:"grid", placeItems:"center"}}>
+    <div style={{ display: "grid", placeItems: "center"}}>
+      <div className="source-check-group">
+        <label>
+          <input type="radio" name="source" value="NH" className="source-check" checked={selectedSource === 'NH'} onChange={handleSource} />
+          <img src={logo1} alt="logo1" />
+        </label>
+
+        <label>
+          <input type="radio" name="source" value="" checked={selectedSource === ''} onChange={handleSource} defaultChecked/>
+          Other
+        </label>
+      </div>
       <input type="file" onChange={handleFileChange} accept=".zip" className="file-upload"/>
       <div className="main-content">
 {isLoading && <img src={loadingGif} alt="Loading..." />}
@@ -101,16 +124,16 @@ const handleRefresh = () => {
         .sort((a, b) => a.name.localeCompare(b.name))
         .map(({ url, name }, index) => (
           <div key={index}>
-            <img src={url} alt={name} />
+            <img src={url} alt={name} aria-label="loaded-image"/>
           </div>
         ))}
-
+        
         <button role="reload" title={ `Reload the page` } className="refresh-btn" onClick={handleRefresh}>
           <svg width="20" height="20" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" clipRule="evenodd" d="M1.85 7.5c0-2.835 2.21-5.65 5.65-5.65 2.778 0 4.152 2.056 4.737 3.15H10.5a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-1 0v1.813C12.296 3.071 10.666.85 7.5.85 3.437.85.85 4.185.85 7.5s2.587 6.65 6.65 6.65c1.944 0 3.562-.77 4.714-1.942a6.8 6.8 0 0 0 1.428-2.167.5.5 0 1 0-.925-.38 5.8 5.8 0 0 1-1.216 1.846c-.971.99-2.336 1.643-4.001 1.643-3.44 0-5.65-2.815-5.65-5.65" fill="#000"/></svg>
         </button>
-        <button role="download" title={ `download the pdf` } className="download-btn" disabled={loadedImages.length === 0} style={{display: (loadedImages.length === 0)? "none": "block"}} onClick={downloadPDF}>
-          <svg width="30" height="30" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.5 1.05a.45.45 0 0 1 .45.45v6.914l2.232-2.232a.45.45 0 1 1 .636.636l-3 3a.45.45 0 0 1-.636 0l-3-3a.45.45 0 1 1 .636-.636L7.05 8.414V1.5a.45.45 0 0 1 .45-.45M2.5 10a.5.5 0 0 1 .5.5V12c0 .554.446 1 .996 1h7.005A1 1 0 0 0 12 12v-1.5a.5.5 0 0 1 1 0V12a2 2 0 0 1-1.999 2H3.996A1.997 1.997 0 0 1 2 12v-1.5a.5.5 0 0 1 .5-.5" fill="#000"/></svg>
-        </button>
+          <button role="download" title={ `download the pdf` } className="download-btn" disabled={loadedImages.length === 0} style={{display: (loadedImages.length === 0)? "none": "block"}} onClick={downloadPDF}>
+            <svg width="30" height="30" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.5 1.05a.45.45 0 0 1 .45.45v6.914l2.232-2.232a.45.45 0 1 1 .636.636l-3 3a.45.45 0 0 1-.636 0l-3-3a.45.45 0 1 1 .636-.636L7.05 8.414V1.5a.45.45 0 0 1 .45-.45M2.5 10a.5.5 0 0 1 .5.5V12c0 .554.446 1 .996 1h7.005A1 1 0 0 0 12 12v-1.5a.5.5 0 0 1 1 0V12a2 2 0 0 1-1.999 2H3.996A1.997 1.997 0 0 1 2 12v-1.5a.5.5 0 0 1 .5-.5" fill="#000"/></svg>
+          </button>
     </div>
     </div>
   );
