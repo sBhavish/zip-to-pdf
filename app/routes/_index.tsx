@@ -46,7 +46,21 @@ const Index = () => {
             (selectedSource === 'NH' && !file.name.match(/t\.(jpg|jpeg|png|gif|webp)$/i))
         )
       )
-      .sort((a, b) => a.name.localeCompare(b.name));
+      .sort((a, b) => {
+        const nameA = a.name.toLowerCase();
+        const nameB = b.name.toLowerCase();
+
+        if (selectedSource === 'NH') {
+          // Natural sorting based on numbers
+          const numA = parseInt(nameA.match(/\d+/)) || Infinity;
+          const numB = parseInt(nameB.match(/\d+/)) || Infinity;
+          return numA - numB || nameA.localeCompare(nameB);
+        } else {
+          // Default lexicographical sorting
+          return nameA.localeCompare(nameB);
+        }
+      });
+
 
     const imageUrlsWithNames: { url: string; name: string }[] = await Promise.all(
       imageFiles.map(async (file) => {
@@ -101,7 +115,7 @@ const handleRefresh = () => {
         </label>
 
         <label>
-          <input type="radio" name="source" value="" checked={selectedSource === ''} onChange={handleSource} defaultChecked/>
+          <input type="radio" name="source" value="" checked={selectedSource === ''} onChange={handleSource}/>
           Other
         </label>
       </div>
@@ -132,7 +146,7 @@ const handleRefresh = () => {
           <svg width="20" height="20" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" clipRule="evenodd" d="M1.85 7.5c0-2.835 2.21-5.65 5.65-5.65 2.778 0 4.152 2.056 4.737 3.15H10.5a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-1 0v1.813C12.296 3.071 10.666.85 7.5.85 3.437.85.85 4.185.85 7.5s2.587 6.65 6.65 6.65c1.944 0 3.562-.77 4.714-1.942a6.8 6.8 0 0 0 1.428-2.167.5.5 0 1 0-.925-.38 5.8 5.8 0 0 1-1.216 1.846c-.971.99-2.336 1.643-4.001 1.643-3.44 0-5.65-2.815-5.65-5.65" fill="#000"/></svg>
         </button>
           <button role="download" title={ `download the pdf` } className="download-btn" disabled={loadedImages.length === 0} style={{display: (loadedImages.length === 0)? "none": "block"}} onClick={downloadPDF}>
-            <svg width="30" height="30" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.5 1.05a.45.45 0 0 1 .45.45v6.914l2.232-2.232a.45.45 0 1 1 .636.636l-3 3a.45.45 0 0 1-.636 0l-3-3a.45.45 0 1 1 .636-.636L7.05 8.414V1.5a.45.45 0 0 1 .45-.45M2.5 10a.5.5 0 0 1 .5.5V12c0 .554.446 1 .996 1h7.005A1 1 0 0 0 12 12v-1.5a.5.5 0 0 1 1 0V12a2 2 0 0 1-1.999 2H3.996A1.997 1.997 0 0 1 2 12v-1.5a.5.5 0 0 1 .5-.5" fill="#000"/></svg>
+            <svg width="30" height="30" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" clipRule="evenodd" d="M7.5 1.05a.45.45 0 0 1 .45.45v6.914l2.232-2.232a.45.45 0 1 1 .636.636l-3 3a.45.45 0 0 1-.636 0l-3-3a.45.45 0 1 1 .636-.636L7.05 8.414V1.5a.45.45 0 0 1 .45-.45M2.5 10a.5.5 0 0 1 .5.5V12c0 .554.446 1 .996 1h7.005A1 1 0 0 0 12 12v-1.5a.5.5 0 0 1 1 0V12a2 2 0 0 1-1.999 2H3.996A1.997 1.997 0 0 1 2 12v-1.5a.5.5 0 0 1 .5-.5" fill="#000"/></svg>
           </button>
     </div>
     </div>
