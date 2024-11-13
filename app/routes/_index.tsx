@@ -23,7 +23,7 @@ export const meta: MetaFunction = () => {
 
 const Index = () => {
   const [images, setImages] = useState([]);
-  const [selectedSource, setSelectedSource] = useState('');
+  const [selectedSource, setSelectedSource] = useState('NH');
   const [loadedImages, setLoadedImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const handleSource = (event) => {
