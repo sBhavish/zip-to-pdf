@@ -162,31 +162,50 @@ const Index = () => {
   const handleRefresh = () => window.location.reload();
 
   return (
-    <div style={{ display: "grid", placeItems: "center" }}>
+    <div className="container">
+      <header>
+        <h1>Zip-to-PDF Converter 📦</h1>
+        <p>Seamlessly transform your zipped images into a clean PDF document.</p>
+      </header>
+
       <div className="source-check-group">
         <label>
           <input type="radio" name="source" value="NH" className="source-check" checked={selectedSource === "NH"} onChange={handleSource} />
           <img src={logo1} alt="logo1" />
+          <span>Source NH</span>
         </label>
         <label>
           <input type="radio" name="source" value="" checked={selectedSource === ""} onChange={handleSource} />
-          Other
+          <span>Default</span>
         </label>
       </div>
 
-      <div className="upload-actions">
-        <input type="file" onChange={handleFileChange} accept=".zip" className="file-upload" />
-        <input type="file" multiple webkitdirectory="" onChange={handleFolderChange} accept=".zip" className="file-upload" />
+      <div className="upload-section">
+        <div className="upload-card">
+          <h3>Single Zip File</h3>
+          <p>Click or drag a single .zip file here</p>
+          <input type="file" onChange={handleFileChange} accept=".zip" className="file-input-hidden" />
+        </div>
+        <div className="upload-card">
+          <h3>Batch Folders</h3>
+          <p>Select a folder containing multiple zips</p>
+          <input type="file" multiple webkitdirectory="" onChange={handleFolderChange} accept=".zip" className="file-input-hidden" />
+        </div>
       </div>
 
       <div className="main-content">
-        {isLoading && <img src={loadingGif} alt="Loading..." />}
+        {isLoading && (
+          <div className="loading-container">
+            <img src={loadingGif} alt="Loading..." />
+            <p>Processing your files...</p>
+          </div>
+        )}
 
         {viewMode === "gallery" && !activeZip && (
           <div className="gallery-grid">
             {galleryZips.map((zipFile) => (
               <button key={zipFile.id} className="gallery-card" onClick={() => { setImages(zipFile.images); setActiveZipId(zipFile.id); }}>
-                <img src={zipFile.previewUrl} alt={zipFile.fileName} />
+                <img src={zipFile.previewUrl} alt={zipFile.fileName} className="preview-img" />
                 <span>{zipFile.fileName}</span>
               </button>
             ))}
@@ -195,7 +214,7 @@ const Index = () => {
 
         {activeZip && (
           <button className="back-btn" onClick={() => { setActiveZipId(null); setLoadedImages([]); }}>
-            Back to gallery
+            ← Back to Gallery
           </button>
         )}
 
@@ -205,14 +224,29 @@ const Index = () => {
           </div>
         ))}
 
-        {loadedImages.map(({ url, name }, index) => (
-          <div key={`loaded-${index}`}>
-            <img src={url} title={name} aria-label="loaded-image" />
-          </div>
-        ))}
+        <div className="viewer-grid">
+          {loadedImages.map(({ url, name }, index) => (
+            <div key={`loaded-${index}`}>
+              <img src={url} title={name} aria-label="loaded-image" />
+            </div>
+          ))}
+        </div>
 
-        <button role="reload" title="Reload the page" className="refresh-btn" onClick={handleRefresh}>↻</button>
-        <button role="download" title="download the pdf" className="download-btn" disabled={loadedImages.length === 0} style={{ display: loadedImages.length === 0 ? "none" : "block" }} onClick={downloadPDF}>↓</button>
+        <div className="controls-overlay">
+          <button role="download" title="Download PDF" className="floating-btn" disabled={loadedImages.length === 0} style={{ display: loadedImages.length === 0 ? "none" : "flex" }} onClick={downloadPDF}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+          </button>
+          <button role="reload" title="Reset" className="floating-btn" onClick={handleRefresh}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M23 4v6h-6" />
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );
