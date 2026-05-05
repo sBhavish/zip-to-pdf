@@ -106,3 +106,44 @@ body {
     display: flex;
     gap: 1rem;
 }
+
+.upload-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    width: min(1000px, 95vw);
+    padding: 1rem;
+}
+
+.gallery-card {
+    background: #161616;
+    border: 1px solid #3d3d3d;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.gallery-card span {
+    display: block;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+    text-align: left;
+    word-break: break-all;
+}
+
+.back-btn {
+    margin: 1rem;
+    padding: 0.5rem 1rem;
+    background: #dbd6d6;
+    color: black;
+    border: 0;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
